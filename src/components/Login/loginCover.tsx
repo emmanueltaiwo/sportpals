@@ -10,6 +10,9 @@ const LoginCover = () => {
       "/assets/images/messi.png",
       "/assets/images/lewandowski.png",
       "/assets/images/ronaldo_3.png",
+      "/assets/images/bale.png",
+      "/assets/images/martial.png",
+      "/assets/images/david-villa.png",
       "/assets/images/neymar_2.png",
     ];
     const randomImageCover = Math.floor(Math.random() * imageCovers.length);
