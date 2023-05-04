@@ -12,12 +12,12 @@ const Footer = () => {
     <footer className="fixed bottom-0 bg-gradient-to-r from-slate-800 to-sky-900 w-full h-[70px] py-5 rounded-t-lg shadow-2xl shadow-white">
       <div className="w-full flex justify-around text-white">
         <HomeOutlinedIcon
-          onClick={() => router.push("/admin")}
+          onClick={() => router.push("/")}
           className="hover:text-white cursor-pointer bg-none"
         />
 
         <SearchOutlinedIcon
-          onClick={() => router.push("/")}
+          onClick={() => router.push("/search")}
           className="hover:text-white cursor-pointer bg-none"
         />
 

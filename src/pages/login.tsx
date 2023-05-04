@@ -7,7 +7,6 @@ import LoginCover from "@/components/Login/loginCover";
 import Link from "next/link";
 import Image from "next/image";
 import { collection, addDoc, updateDoc, doc, setDoc } from "firebase/firestore";
-import PageAnimation from "@/components/page-animation";
 
 const Login = () => {
   const router = useRouter();
@@ -71,7 +70,6 @@ const Login = () => {
   }, [user]);
 
   return (
-    <PageAnimation>
       <div className="w-full h-full absolute bottom-0 flex flex-col">
         <LoginCover />
         <div className="relatiove bottom-[90px]">
@@ -105,7 +103,6 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </PageAnimation>
   );
 };
 
