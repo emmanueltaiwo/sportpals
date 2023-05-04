@@ -7,6 +7,7 @@ interface Props {
   displayName: string;
   displayTime: string;
   post: string;
+  hasPremium: boolean;
 }
 
 const Feed = (props: Props) => {
@@ -30,7 +31,7 @@ const Feed = (props: Props) => {
           </div>
         </div>
         <div className="my-auto">
-          <StarIcon className="text-gray-700" />
+          <StarIcon className={`${props.hasPremium ? "text-amber-500" : "text-gray-700"}`} />
         </div>
       </div>
       <div className="w-[90%] rounded-xl px-3 pt-2 pb-5 flex mx-auto bg-slate-700 mt-3">

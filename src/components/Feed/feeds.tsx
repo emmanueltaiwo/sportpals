@@ -19,6 +19,7 @@ interface allPostData {
   post: string;
   profilePic: string;
   displayTime: string;
+  hasPremium: boolean;
 }
 
 const Feeds = () => {
@@ -35,6 +36,7 @@ const Feeds = () => {
         post: doc.data().post,
         profilePic: doc.data().profilePic,
         displayTime: getTimeDiff(doc.data().createdTime.toDate()),
+        hasPremium: doc.data().hasPremium,
       }));
       setPostData(documents);
     });
@@ -47,6 +49,7 @@ const Feeds = () => {
         post: doc.data().post,
         profilePic: doc.data().profilePic,
         displayTime: getTimeDiff(doc.data().createdTime.toDate()),
+        hasPremium: doc.data().hasPremium,
       }));
       setPostData(documents);
     });
@@ -95,6 +98,7 @@ const Feeds = () => {
               displayName={item.displayName}
               displayTime={item.displayTime}
               post={item.post}
+              hasPremium={item.hasPremium}
             />
           </div>
         ))}
