@@ -30,8 +30,12 @@
     "react-dom": "18.2.0",
     "react-firebase-hooks": "^5.1.1",
     "react-flip-move": "^3.0.5",
+    "react-modal": "^3.16.1",
     "react-preloaders": "^3.0.3",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "@types/react-modal": "^3.16.0"
   }
 }
