@@ -28,7 +28,7 @@ const Story = (props: Props) => {
           height={50}
           alt={""}
         />
-        <p className="text-center text-sm text-gray-200 mt-2">
+        <p className="text-center text-[10px] text-gray-200 mt-2">
           {props.displayName}
         </p>
       </div>

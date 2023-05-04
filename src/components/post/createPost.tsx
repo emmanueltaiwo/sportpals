@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "firebase/firestore";
-import { collection, addDoc, doc } from "firebase/firestore";
+import { collection, addDoc, doc, getDoc, query } from "firebase/firestore";
 import { auth, db } from "../../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import firebase from "firebase/compat/app";
@@ -14,16 +14,37 @@ const CreatePost = () => {
   const [user] = useAuthState(auth);
   const [post, setPost] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [hasPremium, setHasPremium] = useState(false);
+
+  useEffect(() => {}, []);
 
   const createNewPost = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     const now = firebase.firestore.Timestamp.now();
+
+    const userId = user?.uid;
+
+    const hasPremiumRef = doc(collection(db, "globalUserData"), userId);
+
+    getDoc(hasPremiumRef)
+      .then((doc) => {
+        if (doc.exists()) {
+          setHasPremium(doc.data().hasPremium);
+          console.log("Create post", userId, hasPremium);
+        } else {
+          console.log("No such document!");
+        }
+      })
+      .catch((error: any) => {
+        console.log("Error getting document:", error);
+      });
 
     const userPostData = {
       post: post,
       createdTime: now,
       userName: user?.displayName?.toUpperCase(),
       profilePic: user?.photoURL,
+      hasPremium: hasPremium,
     };
 
     const docRef = await addDoc(collection(db, "posts"), userPostData);

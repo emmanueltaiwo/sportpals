@@ -51,7 +51,7 @@ const Stories = () => {
             <AddOutlinedIcon className="shadow-xl" />
           )}
         </div>
-        <p className="text-center text-sm font-md text-gray-200 mt-1">
+        <p className="text-center text-[10px] font-md text-gray-200 mt-1">
           Add Story
         </p>
       </div>
