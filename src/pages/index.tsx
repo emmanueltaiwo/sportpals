@@ -68,12 +68,10 @@ const Index = () => {
   }
 
   return (
-    <PageAnimation>
       <Layout>
         <HomeContainer />
         <Feeds />
       </Layout>
-    </PageAnimation>
   );
 };
 

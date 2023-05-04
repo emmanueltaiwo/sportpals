@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "firebase/firestore";
-import { collection, addDoc, doc, getDoc, query } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  doc,
+  getDoc,
+  onSnapshot,
+} from "firebase/firestore";
 import { auth, db } from "../../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import firebase from "firebase/compat/app";
@@ -16,7 +22,20 @@ const CreatePost = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [hasPremium, setHasPremium] = useState(false);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const userId = user?.uid;
+
+    const docRef = doc(collection(db, "globalUserData"), userId);
+
+    const unsub = onSnapshot(docRef, (doc) => {
+      setHasPremium(doc.data()?.hasPremium);
+      console.log("Current data: ", doc.data()?.hasPremium);
+    });
+
+    return () => {
+      unsub();
+    };
+  }, []);
 
   const createNewPost = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
@@ -100,20 +119,3 @@ const CreatePost = () => {
 };
 
 export default CreatePost;
-
-{
-  /* <textarea
-        className="w-[90%] h-[15vh] p-2 border border-gray-300 rounded-2xl bg-inherit resize-none focus:outline-none outline-none focus:ring focus:border-gray-500 text-white text-sm"
-        placeholder="What's on your mind?"
-        value={post}
-        onChange={(e) => setPost(e.target.value)}
-      /> */
-}
-{
-  /* <button
-        type="submit"
-        className="bg-white px-2 py-2 w-fit text-black rounded-lg text-sm"
-      >
-        Post
-      </button> */
-}
