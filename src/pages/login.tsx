@@ -72,10 +72,10 @@ const Login = () => {
 
   return (
     <PageAnimation>
-      <div className=" w-full h-full absolute bottom-0 flex flex-col">
+      <div className="w-full h-full absolute bottom-0 flex flex-col">
         <LoginCover />
         <div className="relatiove bottom-[90px]">
-          <div className="text-center text-white mt-5">
+          <div className="text-center text-white mt-10">
             <h1 className="font-bold text-3xl">Welcome!</h1>
             <p className="text-gray-400 tracking-5 text-md mt-2">
               SportPals Bring Sports Fan Together!!
@@ -83,7 +83,7 @@ const Login = () => {
           </div>
           <button
             onClick={createUserAccount}
-            className="bg-white py-2 w-fit text-white px-5 mt-5 rounded-lg flex items-center mx-auto justify-around gap-5 shadow-sm shadow-gray-600"
+            className="bg-gradient-to-r from-cyan-500 to-blue-500 py-2 w-fit text-white px-5 mt-5 rounded-lg flex items-center mx-auto justify-around gap-5 shadow-sm shadow-gray-600"
           >
             <Image
               src="/assets/images/google.png"
@@ -91,7 +91,7 @@ const Login = () => {
               height={30}
               alt={"Google"}
             />
-            <p className="my-auto text-black font-semibold">
+            <p className="my-auto text-cyan-900 font-semibold">
               Sign In With Google
             </p>
           </button>

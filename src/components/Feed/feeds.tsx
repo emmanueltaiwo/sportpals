@@ -10,7 +10,6 @@ import {
 import { Timestamp } from "firebase/firestore";
 import firebase from "firebase/compat/app";
 import "firebase/compat/firestore";
-import SportsScoreIcon from "@mui/icons-material/SportsScore";
 import FlipMove from "react-flip-move";
 import Feed from "./feed";
 
@@ -84,12 +83,12 @@ const Feeds = () => {
   };
 
   return (
-    <section className="pb-[30%] flex flex-col gap-2 mt-10">
+    <section className="pb-[30%] flex flex-col gap-2">
       <FlipMove>
         {postData.map((item) => (
           <div
             key={`${item.displayName} ${item.post}`}
-            className="w-full border-t-[1px] mt-5 border-b-[1px] border-gray-500 h-fit pb-5"
+            className="w-full mt-5 h-fit pb-5"
           >
             <Feed
               profilePic={item.profilePic}

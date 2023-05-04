@@ -1,5 +1,6 @@
-import React from 'react'
-import Image from 'next/image';
+import React, { useState } from "react";
+import Image from "next/image";
+import Modal from "./modal";
 
 interface Props {
   photoUrl: string;
@@ -7,18 +8,43 @@ interface Props {
 }
 
 const Story = (props: Props) => {
-  return (
-    <div className='flex items-center flex-col'>
-      <Image
-        src={props.photoUrl}
-        className="rounded-full border-[1px] border-white"
-        width={50}
-        height={50}
-        alt={""}
-      />
-      <p className="text-center text-sm text-gray-200">{props.displayName}</p>
-    </div>
-  );
-}
+  const [showModal, setShowModal] = useState(false);
 
-export default Story
+  const handleStoryClick = () => {
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+
+  return (
+    <>
+      <div className="flex items-center flex-col" onClick={handleStoryClick}>
+        <Image
+          src={props.photoUrl}
+          className="rounded-xl border-[1px] border-cyan-600"
+          width={50}
+          height={50}
+          alt={""}
+        />
+        <p className="text-center text-sm text-gray-200 mt-2">
+          {props.displayName}
+        </p>
+      </div>
+      {showModal && (
+        <Modal onClose={handleModalClose}>
+          <Image
+            src={props.photoUrl}
+            loading="lazy"
+            width={300}
+            height={300}
+            alt=""
+          />
+        </Modal>
+      )}
+    </>
+  );
+};
+
+export default Story;
