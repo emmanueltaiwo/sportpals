@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
@@ -11,6 +11,20 @@ import { doc, deleteDoc, collection } from "firebase/firestore";
 const Header = () => {
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
+  const [greeting, setGreeting] = useState("");
+
+  useEffect(() => {
+    const time = new Date().getHours();
+
+    if (time >= 0 && time < 12) {
+      setGreeting("Good morning 😊,");
+    } else if (time >= 12 && time < 18) {
+      setGreeting("Good afternoon 🌞,");
+    } else {
+      setGreeting("Good evening 🌃,");
+    }
+  }, []);
+
   const logout = async () => {
     auth.signOut();
     if (user) {
@@ -19,7 +33,7 @@ const Header = () => {
   };
 
   return (
-    <header className="sticky w-full flex gap-2 py-3 justify-between border-b-[1px] border-gray-400">
+    <header className="sticky w-full flex gap-2 py-3 justify-between border-b-[0.2px] border-gray-400">
       <div className="flex gap-[5px] ml-3 my-auto">
         <Image
           src="/assets/images/logo_1.png"
@@ -29,7 +43,7 @@ const Header = () => {
           alt={"Logo"}
         />
         <div>
-          <p className="font-medium">Welcome</p>
+          <p className="font-medium">{greeting}</p>
           <p className="font-bold">{user?.displayName}</p>
         </div>
       </div>
