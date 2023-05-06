@@ -35,7 +35,7 @@ const CreatePost = () => {
     return () => {
       unsub();
     };
-  }, []);
+  }, [user]);
 
   const createNewPost = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
