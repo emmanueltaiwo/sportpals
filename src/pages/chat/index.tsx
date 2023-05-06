@@ -63,7 +63,7 @@ const Index = () => {
     if (user) {
       router.push("/chat");
     }
-  }, [user]);
+  }, [user, router]);
 
   useEffect(() => {
     if (user) {
@@ -113,7 +113,7 @@ const Index = () => {
 
       return unsubscribe;
     }
-  }, []);
+  }, [friends, user]);
 
   // const unsubscribe = onSnapshot(collection(db, "friends"), (snapshot) => {
   //   setFriends(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
@@ -139,6 +139,7 @@ const Index = () => {
           id: user?.uid,
         });
         console.log("Collection created with ID: ", docRef.id);
+        alert(`new friend added`)
       } else {
         // User already exists in the friends collection, show alert message
         alert("User already exists in friends list");

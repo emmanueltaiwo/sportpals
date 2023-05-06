@@ -24,7 +24,7 @@ const Login = () => {
     if (isLoggedIn) {
       router.push("/");
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, router]);
 
   useEffect(() => {
     if (user) {
@@ -63,7 +63,7 @@ const Login = () => {
       };
       addUserToDatabase();
     }
-  }, [user]);
+  }, [user, hasPremium, router]);
 
   useEffect(() => {
     console.log(user);

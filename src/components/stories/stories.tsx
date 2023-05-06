@@ -66,7 +66,7 @@ const Stories = () => {
 
         return unsubscribe;
       }
-    }, []);
+    }, [friends, user]);
 
   return (
     <section className="flex overflow-x-auto hide-scroll-bar py-3 pb-5">

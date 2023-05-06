@@ -43,7 +43,7 @@ const Search = () => {
     if (user) {
       router.push("/search");
     }
-  }, [user]);
+  }, [user, router]);
 
   useEffect(() => {
     const userId = user?.uid;
@@ -64,7 +64,7 @@ const Search = () => {
           console.log("Error getting documents: ", error);
         });
     }
-  }, []);
+  }, [userList, user]);
 
   const handleSearch = (e: {
     preventDefault: () => void;
