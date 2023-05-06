@@ -13,8 +13,13 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import Image from "next/image";
-import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
-import Loader from "@/components/UI/Loader";
+import AddIcon from "@mui/icons-material/Add";
+
+type AddUserData = {
+  name: string;
+  photoURL: string;
+  hasPremium: boolean;
+};
 
 const Search = () => {
   const router = useRouter();
@@ -22,6 +27,12 @@ const Search = () => {
   const [search, setSearch] = useState("");
   const [userList, setUserList] = useState<DocumentData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [userData, setUserData] = useState<AddUserData>({
+    name: "",
+    photoURL: "",
+    hasPremium: false,
+  });
+
   useEffect(() => {
     if (!loading && !user) {
       router.push("/login");
@@ -42,10 +53,12 @@ const Search = () => {
 
       getDocs(userRef)
         .then((querySnapshot) => {
-          const usersData = querySnapshot.docs.map((doc) => doc.data());
+          const usersData = querySnapshot.docs
+            .filter((doc) => doc.id !== user?.uid)
+            .map((doc) => doc.data());
           setUserList(usersData);
           console.log("User List", userList);
-          setIsLoading(false)
+          setIsLoading(false);
         })
         .catch((error) => {
           console.log("Error getting documents: ", error);
@@ -59,6 +72,67 @@ const Search = () => {
   }) => {
     e.preventDefault();
     setSearch(e.target.value);
+  };
+
+  const handleAddAccept = async (userId: string) => {
+    try {
+      const selectedUser = userList.find((user) => user.userId === userId);
+      if (selectedUser) {
+        const currentUserRef = collection(
+          db,
+          `friends/${user?.uid}/friend${user?.uid}`
+        );
+        const selectedUserRef = collection(
+          db,
+          `friends/${selectedUser.userId}/friend${selectedUser.userId}`
+        );
+
+        // Check if the selected user already exists in the current user's collection
+        const currentUserQuerySnapshot = await getDocs(currentUserRef);
+        const currentUserExists = currentUserQuerySnapshot.docs.some(
+          (doc) => doc.data().id === selectedUser.userId
+        );
+
+        // Check if the current user already exists in the selected user's collection
+        const selectedUserQuerySnapshot = await getDocs(selectedUserRef);
+        const selectedUserExists = selectedUserQuerySnapshot.docs.some(
+          (doc) => doc.data().id === user?.uid
+        );
+
+        if (currentUserExists) {
+          alert(
+            `User ${selectedUser.displayName} is already in your friends list`
+          );
+        } else {
+          const currentUserData = {
+            id: selectedUser.userId,
+            name: selectedUser.displayName,
+            photoURL: selectedUser.photoUrl,
+            hasPremium: selectedUser.hasPremium,
+          };
+          await addDoc(currentUserRef, currentUserData);
+          console.log(`User ${userId} added to your friends list`);
+        }
+
+        if (selectedUserExists) {
+          alert(
+            `You are already in ${selectedUser.displayName}'s friends list`
+          );
+        } else {
+          const selectedUserData = {
+            id: user?.uid,
+            name: user?.displayName,
+            photoURL: user?.photoURL,
+          };
+          await addDoc(selectedUserRef, selectedUserData);
+          console.log(
+            `User ${user?.uid} added to ${selectedUser.displayName}'s friends list`
+          );
+        }
+      }
+    } catch (error) {
+      console.error("Error adding user to friends list: ", error);
+    }
   };
 
   return (
@@ -110,8 +184,11 @@ const Search = () => {
                     {data.hasPremium ? "Premium User" : "Not a Premium User"}
                   </p>
                 </div>
-                <div className="my-auto bg-cyan-700 px-3 py-2 rounded-xl">
-                  <ChatBubbleOutlineOutlinedIcon />
+                <div
+                  className="my-auto bg-cyan-700 px-3 py-2 rounded-xl"
+                  onClick={() => handleAddAccept(data.userId)}
+                >
+                  <AddIcon />
                 </div>
               </div>
             ))
@@ -152,8 +229,11 @@ const Search = () => {
                       {data.hasPremium ? "Premium User" : "Not a Premium User"}
                     </p>
                   </div>
-                  <div className="my-auto bg-cyan-700 px-3 py-2 rounded-xl">
-                    <ChatBubbleOutlineOutlinedIcon />
+                  <div
+                    className="my-auto bg-cyan-700 px-3 py-2 rounded-xl"
+                    onClick={() => handleAddAccept(data.userId)}
+                  >
+                    <AddIcon />
                   </div>
                 </div>
               ))

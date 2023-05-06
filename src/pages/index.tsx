@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../firebase";
 import { useRouter } from "next/router";
-import Loader from "@/components/UI/Loader";
-import PageAnimation from "@/components/page-animation";
+import Loader from "@/components/UI/loader";
 import { collection, getDocs } from "firebase/firestore";
 import Layout from "@/components/Layout";
 import HomeContainer from "@/components/container/homeContainer";
-import Feeds from "@/components/Feed/feeds";
 
 interface allUserData {
   creationTime: string;
@@ -70,7 +68,6 @@ const Index = () => {
   return (
       <Layout>
         <HomeContainer />
-        <Feeds />
       </Layout>
   );
 };

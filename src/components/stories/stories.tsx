@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { db, auth } from "../../../firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import Story from "./story";
 import Image from "next/image";
@@ -18,9 +18,18 @@ interface allUserData {
   userId: string;
 }
 
+type FriendData = {
+  name: string;
+  photoURL: string;
+  hasPremium: boolean;
+  id: string;
+  message: string;
+};
+
 const Stories = () => {
   const [user, loading, error] = useAuthState(auth);
   const [myUsers, setMyUsers] = useState<allUserData[]>([]);
+  const [friends, setFriends] = useState<FriendData[]>([]);
 
   useEffect(() => {
     const getAllUsers = async () => {
@@ -41,12 +50,36 @@ const Stories = () => {
     getAllUsers();
   });
 
+    useEffect(() => {
+      if (user) {
+        const unsubscribe = onSnapshot(
+          collection(db, `friends/${user?.uid}/friend${user?.uid}`),
+          (snapshot) => {
+            const friendData = snapshot.docs.map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            })) as FriendData[];
+            setFriends(friendData);
+            console.log(friends);
+          }
+        );
+
+        return unsubscribe;
+      }
+    }, []);
+
   return (
     <section className="flex overflow-x-auto hide-scroll-bar py-3 pb-5">
       <div className="w-fit flex-shrink-0 px-1 flex gap-[2px] flex-col ml-3">
         <div className="rounded-xl w-fit mx-auto bg-gradient-to-r from-slate-800 to-slate-800 px-[5px] border-[1px] border-cyan-600 py-[5px] text-white">
           {user ? (
-            <Image src={user?.photoURL || ""} className="rounded-xl" width={50} height={50} alt={""} />
+            <Image
+              src={user?.photoURL || ""}
+              className="rounded-xl"
+              width={50}
+              height={50}
+              alt={""}
+            />
           ) : (
             <AddOutlinedIcon className="shadow-xl" />
           )}
@@ -56,12 +89,12 @@ const Stories = () => {
         </p>
       </div>
       <div className="w-full ml-[5%] my-auto flex gap-2">
-        {myUsers.map((item) => (
+        {friends.map((item) => (
           <div
-            key={item.userId}
+            key={item.id}
             className="flex-shrink-0 px-1 flex items-center gap-[2px] flex-col"
           >
-            <Story photoUrl={item.photoUrl} displayName={item.displayName} />
+            <Story photoUrl={item.photoURL} displayName={item.name} />
           </div>
         ))}
       </div>
