@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, db } from "../../firebase";
 import { useRouter } from "next/router";
-import Loader from "@/components/UI/Loader";
-import PageAnimation from "@/components/page-animation";
+import Loader from "@/components/ui/preloader";
 import { collection, getDocs } from "firebase/firestore";
 import Layout from "@/components/Layout";
 import HomeContainer from "@/components/container/homeContainer";
-import Feeds from "@/components/Feed/feeds";
 
 interface allUserData {
   creationTime: string;
@@ -36,7 +34,7 @@ const Index = () => {
     if (user) {
       router.push("/");
     }
-  }, [user]);
+  }, [user, router]);
   useEffect(() => {
     const getAllUsers = async () => {
       const querySnapshot = await getDocs(collection(db, "users"));
@@ -70,7 +68,6 @@ const Index = () => {
   return (
       <Layout>
         <HomeContainer />
-        <Feeds />
       </Layout>
   );
 };

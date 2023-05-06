@@ -23,9 +23,7 @@ const Loader = (props: Props) => {
           fill="currentFill"
         />
       </svg>
-      <span className="text-center text-lg mt-3">
-        {props.text}
-      </span>
+      <span className="text-center text-lg mt-3">{props.text}</span>
     </div>
   );
 };

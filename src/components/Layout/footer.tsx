@@ -28,7 +28,7 @@ const Footer = () => {
         />
 
         <ChatBubbleOutlineOutlinedIcon
-          onClick={() => router.push("/")}
+          onClick={() => router.push("/chat")}
           className="hover:text-white cursor-pointer"
         />
 
