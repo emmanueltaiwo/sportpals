@@ -4,7 +4,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: AIzaSyDnlH0IBu8NFhuKl8IITwkgC7208sQpegE,
+  apiKey: "AIzaSyDnlH0IBu8NFhuKl8IITwkgC7208sQpegE",
   authDomain: "yoursportpals.firebaseapp.com",
   projectId: "yoursportpals",
   storageBucket: "yoursportpals.appspot.com",
