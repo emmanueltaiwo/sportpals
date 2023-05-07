@@ -22,7 +22,7 @@ const Footer = () => {
         />
 
         <SportsSoccerOutlinedIcon
-          onClick={() => router.push("/")}
+          onClick={() => router.push("/sports")}
           style={{ fontSize: "3rem", marginTop: "-0.5rem" }}
           className="hover:text-white cursor-pointer text-amber-600 my-auto animate-spin slow"
         />
@@ -33,7 +33,7 @@ const Footer = () => {
         />
 
         <PermIdentityOutlinedIcon
-          onClick={() => router.push("/")}
+          onClick={() => router.push("/profile")}
           className="hover:text-white cursor-pointer"
         />
       </div>
