@@ -32,27 +32,6 @@ const Index = () => {
     hasPremium: false,
   });
 
-  const messageArray = [
-    {
-      id: 1,
-      fullname: "John Smith",
-      profile_pic_url: user?.photoURL,
-      message: "Hello, world!",
-    },
-    {
-      id: 2,
-      fullname: "Jane Doe",
-      profile_pic_url: user?.photoURL,
-      message: "How are you doing today?",
-    },
-    {
-      id: 3,
-      fullname: "Bob Johnson",
-      profile_pic_url: user?.photoURL,
-      message: "Just wanted to say hi!",
-    },
-  ];
-
   useEffect(() => {
     if (!loading && !user) {
       router.push("/login");
@@ -61,19 +40,26 @@ const Index = () => {
 
   useEffect(() => {
     if (user) {
-      router.push("/chat");
-    }
-  }, [user, router]);
-
-  useEffect(() => {
-    if (user) {
       // Fetch a random document from the 'globalUserData' collection
+
       const getRandomDocument = async () => {
         const collectionRef = collection(db, "globalUserData");
         const snapshot = await getDocs(collectionRef);
         const docs = snapshot.docs.filter((doc) => doc.id !== user?.uid); // filter out the current user's document
-        const randomIndex = Math.floor(Math.random() * docs.length);
-        return docs[randomIndex];
+
+        // get the user's friends collection
+        const friendsCollectionRef = collection(
+          db,
+          `friends/${user?.uid}/friend${user?.uid}`
+        );
+        const friendsSnapshot = await getDocs(friendsCollectionRef);
+        const friendIds = friendsSnapshot.docs.map((doc) => doc.id); // get an array of the friend ids
+
+        // filter out any documents that are already in the friends collection
+        const filteredDocs = docs.filter((doc) => !friendIds.includes(doc.id));
+
+        const randomIndex = Math.floor(Math.random() * filteredDocs.length);
+        return filteredDocs[randomIndex];
       };
 
       // Set the userData state once a random document is fetched
@@ -114,12 +100,6 @@ const Index = () => {
       return unsubscribe;
     }
   }, [friends, user]);
-
-  // const unsubscribe = onSnapshot(collection(db, "friends"), (snapshot) => {
-  //   setFriends(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-  // });
-
-  // return () => unsubscribe();
 
   const handleAccept = async (userId: string, userData: any) => {
     try {
@@ -171,12 +151,12 @@ const Index = () => {
               height={50}
               alt=""
             />
-            <p className="my-auto text-gray-500 text-sm">
+            <p className="my-auto text-gray-500 text-[12px]">
               Would you like to connect with{" "}
               <span className="text-white font-md">{userData.name}</span>
             </p>
           </div>
-          <div className="flex justify-between gap-3 mx-5 mt-5">
+          <div className="flex justify-between gap-3 mr-5 ml-3 mt-5">
             <button
               onClick={() => {
                 if (user?.uid) {
@@ -196,9 +176,9 @@ const Index = () => {
           </div>
         </div>
 
-        <section className="mt-[5vh]">
+        <section className="mt-[3vh]">
           <h1 className="mx-5 text-[40px] font-bold tracking-wider">Chats</h1>
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-5">
             {friends.map((friend) => (
               <div
                 className="mx-5 flex justify-between gap-2 mt-4"

@@ -40,12 +40,6 @@ const Search = () => {
   }, [loading, user, router]);
 
   useEffect(() => {
-    if (user) {
-      router.push("/search");
-    }
-  }, [user, router]);
-
-  useEffect(() => {
     const userId = user?.uid;
 
     if (userId) {
@@ -111,13 +105,11 @@ const Search = () => {
             hasPremium: selectedUser.hasPremium,
           };
           await addDoc(currentUserRef, currentUserData);
+          alert(`${selectedUser.displayName} is added to your friends list`);
           console.log(`User ${userId} added to your friends list`);
         }
 
         if (selectedUserExists) {
-          alert(
-            `You are already in ${selectedUser.displayName}'s friends list`
-          );
         } else {
           const selectedUserData = {
             id: user?.uid,
