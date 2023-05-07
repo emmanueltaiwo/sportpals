@@ -60,7 +60,6 @@ const Stories = () => {
               ...doc.data(),
             })) as FriendData[];
             setFriends(friendData);
-            console.log(friends);
           }
         );
 

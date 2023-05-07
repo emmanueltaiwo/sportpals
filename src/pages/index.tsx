@@ -31,11 +31,6 @@ const Index = () => {
   }, [loading, user, router]);
 
   useEffect(() => {
-    if (user) {
-      router.push("/");
-    }
-  }, [user, router]);
-  useEffect(() => {
     const getAllUsers = async () => {
       const querySnapshot = await getDocs(collection(db, "users"));
       const documents = querySnapshot.docs.map((doc) => ({
