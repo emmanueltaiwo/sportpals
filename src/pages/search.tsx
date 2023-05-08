@@ -51,7 +51,6 @@ const Search = () => {
             .filter((doc) => doc.id !== user?.uid)
             .map((doc) => doc.data());
           setUserList(usersData);
-          console.log("User List", userList);
           setIsLoading(false);
         })
         .catch((error) => {
@@ -199,7 +198,7 @@ const Search = () => {
                   className="flex w-[90%] gap-2 justify-between mx-3"
                 >
                   <div>
-                    <Image
+                    <img
                       src={data.photoUrl || ""}
                       width={50}
                       height={50}
