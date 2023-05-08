@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { db, auth } from "../../../firebase";
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import Story from "./story";
 import Image from "next/image";
@@ -28,6 +34,7 @@ type FriendData = {
 
 const Stories = () => {
   const [user, loading, error] = useAuthState(auth);
+  const [photoUrl, setPhotoUrl] = useState("");
   const [myUsers, setMyUsers] = useState<allUserData[]>([]);
   const [friends, setFriends] = useState<FriendData[]>([]);
 
@@ -50,30 +57,50 @@ const Stories = () => {
     getAllUsers();
   });
 
-    useEffect(() => {
-      if (user) {
-        const unsubscribe = onSnapshot(
-          collection(db, `friends/${user?.uid}/friend${user?.uid}`),
-          (snapshot) => {
-            const friendData = snapshot.docs.map((doc) => ({
-              id: doc.id,
-              ...doc.data(),
-            })) as FriendData[];
-            setFriends(friendData);
-          }
-        );
+  useEffect(() => {
+    if (user) {
+      const unsubscribe = onSnapshot(
+        collection(db, `friends/${user?.uid}/friend${user?.uid}`),
+        (snapshot) => {
+          const friendData = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          })) as FriendData[];
+          setFriends(friendData);
+        }
+      );
 
-        return unsubscribe;
-      }
-    }, [friends, user]);
+      return unsubscribe;
+    }
+  }, [friends, user]);
+
+  useEffect(() => {
+    const userId = user?.uid;
+    if (userId) {
+      const userRef = doc(db, "globalUserData", userId); // reference to the document with the user's id
+
+      getDoc(userRef)
+        .then((doc) => {
+          if (doc.exists()) {
+            const photoUrl = doc.data().photoUrl;
+            setPhotoUrl(photoUrl);
+          } else {
+            console.log("No such document!");
+          }
+        })
+        .catch((error) => {
+          console.log("Error getting document: ", error);
+        });
+    }
+  }, [user]);
 
   return (
     <section className="flex overflow-x-auto hide-scroll-bar py-3 pb-5">
       <div className="w-fit flex-shrink-0 px-1 flex gap-[2px] flex-col ml-3">
         <div className="rounded-xl w-fit mx-auto bg-gradient-to-r from-slate-800 to-slate-800 px-[5px] border-[1px] border-cyan-600 py-[5px] text-white">
           {user ? (
-            <Image
-              src={user?.photoURL || ""}
+            <img
+              src={photoUrl || ""}
               className="rounded-xl"
               width={50}
               height={50}
