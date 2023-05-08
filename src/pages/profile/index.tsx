@@ -16,7 +16,6 @@ const Index = () => {
   const [photoUrl, setPhotoUrl] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newUsername, setNewUsername] = useState("");
-  const [newPhotoUrl, setNewPhotoUrl] = useState("");
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
@@ -33,10 +32,10 @@ const Index = () => {
     // Update the user document with the new displayName and photoUrl
     updateDoc(userRef, {
       displayName: newUsername,
-      photoUrl: newPhotoUrl,
     })
       .then(() => {
         console.log("Document successfully updated!");
+        alert("Username Updated Succesfully, Refresh for changes to take place")
       })
       .catch((error) => {
         console.error("Error updating document: ", error);
@@ -91,12 +90,13 @@ const Index = () => {
     }
   }, [user]);
 
+
   return (
     <Layout>
       <section className="w-[100%] mt-10">
         <div className="flex gap-3 w-full justify-start pb-[5vh]">
           <div className="ml-3">
-            <img
+            <Image
               src={photoUrl || "/assets/images/logo_1.png"}
               width={100}
               height={100}
@@ -105,10 +105,10 @@ const Index = () => {
             />
           </div>
           <div className="flex flex-col my-auto ml-3 mr-2 gap-3">
-            <h1 className="text-[20px] font-bold">{userName}</h1>
+            <h1 className="text-[18px] font-bold">{userName}</h1>
             <div className="flex gap-3">
               <button
-                className="bg-white text-slate-900 w-fit px-5 py-2 rounded-xl font-bold text-[17px]"
+                className="bg-white text-slate-900 w-fit px-4 py-1 rounded-xl font-bold text-[15px]"
                 onClick={handleModalOpen}
               >
                 Edit Profile
@@ -118,7 +118,7 @@ const Index = () => {
                   e.preventDefault();
                   alert("OOps! Feature not added yet!");
                 }}
-                className="my-auto w-fit bg-slate-700 py-2 px-3 rounded-xl"
+                className="my-auto w-fit bg-slate-700 py-2 px-2 rounded-xl"
               >
                 <DeleteIcon className="text-red-500" />
               </div>
@@ -146,14 +146,7 @@ const Index = () => {
               sx={{ mt: 2 }}
               required
             />
-            <TextField
-              label="Photo URL"
-              value={newPhotoUrl}
-              onChange={(e) => setNewPhotoUrl(e.target.value)}
-              fullWidth
-              sx={{ mt: 2 }}
-              required
-            />
+            
             <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
               <Button
                 variant="contained"

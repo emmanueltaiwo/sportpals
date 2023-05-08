@@ -4,12 +4,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDnlH0IBu8NFhuKl8IITwkgC7208sQpegE",
-  authDomain: "yoursportpals.firebaseapp.com",
-  projectId: "yoursportpals",
-  storageBucket: "yoursportpals.appspot.com",
-  messagingSenderId: "127329642139",
-  appId: "1:127329642139:web:0255d337343a3e7a5a883e",
+  apiKey: "AIzaSyCitLqKvqMVehOKTiCJ-8h6CjXJiyukxy8",
+  authDomain: "thesportpals-c7728.firebaseapp.com",
+  projectId: "thesportpals-c7728",
+  storageBucket: "thesportpals-c7728.appspot.com",
+  messagingSenderId: "690592203472",
+  appId: "1:690592203472:web:2b6516eb6cbbfefe8d94d5",
 };
 
 // Initialize Firebase
