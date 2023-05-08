@@ -100,7 +100,7 @@ const Stories = () => {
         <div className="rounded-xl w-fit mx-auto bg-gradient-to-r from-slate-800 to-slate-800 px-[5px] border-[1px] border-cyan-600 py-[5px] text-white">
           {user ? (
             <img
-              src={photoUrl || ""}
+              src={photoUrl || "/assets/images/logo_1.png"}
               className="rounded-xl"
               width={50}
               height={50}
