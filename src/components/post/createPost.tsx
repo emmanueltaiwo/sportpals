@@ -100,7 +100,7 @@ const CreatePost = () => {
         onClick={() => setModalIsOpen(true)}
       >
         <img
-          src={photoUrl || ""}
+          src={photoUrl || "/assets/images/logo_1.png"}
           className="rounded-xl h-[50px] w-[50px] ml-5"
           height={50}
           width={50}
