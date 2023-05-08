@@ -34,7 +34,7 @@ const Story = (props: Props) => {
       </div>
       {showModal && (
         <Modal onClose={handleModalClose}>
-          <img
+          <Image
             src={props.photoUrl}
             loading="lazy"
             width={300}

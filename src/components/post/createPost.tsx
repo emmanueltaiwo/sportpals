@@ -99,7 +99,7 @@ const CreatePost = () => {
         className="flex items-center justify-left mt-5 gap-2  border-b-[0.2px] border-gray-400 pb-5"
         onClick={() => setModalIsOpen(true)}
       >
-        <img
+        <Image
           src={photoUrl || "/assets/images/logo_1.png"}
           className="rounded-xl h-[50px] w-[50px] ml-5"
           height={50}

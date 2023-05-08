@@ -33,7 +33,7 @@ type FriendData = {
 };
 
 const Stories = () => {
-  const [user, loading, error] = useAuthState(auth);
+  const [user] = useAuthState(auth);
   const [photoUrl, setPhotoUrl] = useState("");
   const [myUsers, setMyUsers] = useState<allUserData[]>([]);
   const [friends, setFriends] = useState<FriendData[]>([]);
@@ -99,7 +99,7 @@ const Stories = () => {
       <div className="w-fit flex-shrink-0 px-1 flex gap-[2px] flex-col ml-3">
         <div className="rounded-xl w-fit mx-auto bg-gradient-to-r from-slate-800 to-slate-800 px-[5px] border-[1px] border-cyan-600 py-[5px] text-white">
           {user ? (
-            <img
+            <Image
               src={photoUrl || "/assets/images/logo_1.png"}
               className="rounded-xl"
               width={50}
@@ -120,7 +120,10 @@ const Stories = () => {
             key={item.id}
             className="flex-shrink-0 px-1 flex items-center gap-[2px] flex-col"
           >
-            <Story photoUrl={item.photoURL} displayName={item.name} />
+            <Story
+              photoUrl={item.photoURL || "/assets/images/logo_1.png"}
+              displayName={item.name}
+            />
           </div>
         ))}
       </div>
