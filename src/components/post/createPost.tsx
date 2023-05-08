@@ -18,6 +18,7 @@ Modal.setAppElement("#__next");
 
 const CreatePost = () => {
   const [user] = useAuthState(auth);
+  const [photoUrl, setPhotoUrl] = useState("");
   const [post, setPost] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [hasPremium, setHasPremium] = useState(false);
@@ -72,14 +73,34 @@ const CreatePost = () => {
     setModalIsOpen(false);
   };
 
+  useEffect(() => {
+    const userId = user?.uid;
+    if (userId) {
+      const userRef = doc(db, "globalUserData", userId); // reference to the document with the user's id
+
+      getDoc(userRef)
+        .then((doc) => {
+          if (doc.exists()) {
+            const photoUrl = doc.data().photoUrl;
+            setPhotoUrl(photoUrl);
+          } else {
+            console.log("No such document!");
+          }
+        })
+        .catch((error) => {
+          console.log("Error getting document: ", error);
+        });
+    }
+  }, [user]);
+
   return (
     <>
       <form
         className="flex items-center justify-left mt-5 gap-2  border-b-[0.2px] border-gray-400 pb-5"
         onClick={() => setModalIsOpen(true)}
       >
-        <Image
-          src={user?.photoURL || ""}
+        <img
+          src={photoUrl || ""}
           className="rounded-xl h-[50px] w-[50px] ml-5"
           height={50}
           width={50}

@@ -4,7 +4,14 @@ import { useRouter } from "next/router";
 import { auth, db } from "../../../firebase";
 import Layout from "@/components/Layout";
 import Image from "next/image";
-import { collection, getDocs, addDoc, onSnapshot, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
 
 type UserData = {
@@ -93,7 +100,6 @@ const Index = () => {
             ...doc.data(),
           })) as FriendData[];
           setFriends(friendData);
-          console.log(friends);
         }
       );
 
@@ -119,7 +125,7 @@ const Index = () => {
           id: user?.uid,
         });
         console.log("Collection created with ID: ", docRef.id);
-        alert(`new friend added`)
+        alert(`new friend added`);
       } else {
         // User already exists in the friends collection, show alert message
         alert("User already exists in friends list");
@@ -145,12 +151,15 @@ const Index = () => {
           </div>
           <div className="flex gap-3 justify-between mx-5 mt-5">
             <Image
-              src={userData.photoURL || ""}
+              src={
+                userData.photoURL ? userData.photoURL : "/assets/images/logo_1.png"
+              }
               className="rounded-full border-2 border-cyan-300"
               width={50}
               height={50}
               alt=""
             />
+
             <p className="my-auto text-gray-500 text-[12px]">
               Would you like to connect with{" "}
               <span className="text-white font-md">{userData.name}</span>

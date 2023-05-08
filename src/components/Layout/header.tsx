@@ -6,11 +6,12 @@ import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import { auth, db } from "../../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
-import { doc, deleteDoc, collection } from "firebase/firestore";
+import { doc, deleteDoc, collection, getDoc } from "firebase/firestore";
 
 const Header = () => {
   const router = useRouter();
   const [user, loading, error] = useAuthState(auth);
+  const [userName, setUserName] = useState("");
   const [greeting, setGreeting] = useState("");
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -25,6 +26,27 @@ const Header = () => {
       setGreeting("Good evening 🌃,");
     }
   }, []);
+
+  useEffect(() => {
+    const userId = user?.uid;
+    if (userId) {
+      const userRef = doc(db, "globalUserData", userId); // reference to the document with the user's id
+
+      getDoc(userRef)
+        .then((doc) => {
+          if (doc.exists()) {
+            const displayName = doc.data().displayName;
+            setUserName(displayName);
+          } else {
+            console.log("No such document!");
+          }
+        })
+        .catch((error) => {
+          console.log("Error getting document: ", error);
+        });
+    }
+  }, [user]);
+
 
   const logout = async () => {
     auth.signOut();
@@ -45,7 +67,7 @@ const Header = () => {
         />
         <div>
           <p className="font-medium text-[13px]">{greeting}</p>
-          <p className="font-bold text-[15px]">{user?.displayName}</p>
+          <p className="font-bold text-[15px]">{userName}</p>
         </div>
       </div>
       <div className="mr-3 my-auto flex gap-3 text-gray-400 relative">

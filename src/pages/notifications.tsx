@@ -46,7 +46,7 @@ const Notifications = () => {
           <span className="text-white font-bold">{notifications.length}</span>{" "}
           Notifications
         </p>
-        <div className="flex flex-col w-[95%] gap-8 h-fit bg-slate-800 py-10 rounded-t-3xl mt-8 ">
+        <div className="flex flex-col w-[100%] gap-8 h-fit bg-slate-800 py-10 rounded-t-3xl mt-8 ">
           {notifications.map((item) => (
             <div
               key={item.id}
