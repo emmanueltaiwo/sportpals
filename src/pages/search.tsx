@@ -154,7 +154,7 @@ const Search = () => {
               >
                 <div>
                   <Image
-                    src={data.photoUrl || ""}
+                    src={data.photoUrl || "/assets/images/logo_1.png"}
                     width={50}
                     height={50}
                     alt={""}
@@ -198,8 +198,8 @@ const Search = () => {
                   className="flex w-[90%] gap-2 justify-between mx-3"
                 >
                   <div>
-                    <img
-                      src={data.photoUrl || ""}
+                    <Image
+                      src={data.photoUrl || "/assets/images/logo_1.png"}
                       width={50}
                       height={50}
                       alt={""}
