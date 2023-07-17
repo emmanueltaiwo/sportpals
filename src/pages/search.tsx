@@ -2,36 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useRouter } from "next/router";
 import { auth, db } from "../../firebase";
-import PageAnimation from "@/components/page-animation";
 import { DocumentData } from "@firebase/firestore-types";
 import Layout from "@/components/Layout";
-import {
-  collection,
-  addDoc,
-  doc,
-  getDocs,
-  onSnapshot,
-} from "firebase/firestore";
+import { collection, addDoc, getDocs } from "firebase/firestore";
 import Image from "next/image";
 import AddIcon from "@mui/icons-material/Add";
 
-type AddUserData = {
-  name: string;
-  photoURL: string;
-  hasPremium: boolean;
-};
-
 const Search = () => {
   const router = useRouter();
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const [search, setSearch] = useState("");
   const [userList, setUserList] = useState<DocumentData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [userData, setUserData] = useState<AddUserData>({
-    name: "",
-    photoURL: "",
-    hasPremium: false,
-  });
 
   useEffect(() => {
     if (!loading && !user) {
@@ -109,6 +91,8 @@ const Search = () => {
         }
 
         if (selectedUserExists) {
+          // TODO document why this block is empty
+          // TODO document why this block is empty
         } else {
           const selectedUserData = {
             id: user?.uid,
@@ -125,6 +109,96 @@ const Search = () => {
       console.error("Error adding user to friends list: ", error);
     }
   };
+
+  let renderSearch;
+
+  if (isLoading) {
+    renderSearch = <p>Loading...</p>;
+  } else if (search.trim() === "") {
+    renderSearch = userList.map((data) => (
+      <div
+        key={data.userId}
+        className="flex w-[90%] gap-2 justify-between mx-3"
+      >
+        <div>
+          <Image
+            src={data.photoUrl || "/assets/images/logo_1.png"}
+            width={50}
+            height={50}
+            alt={""}
+            className="w-[15vh] h-[15vh] rounded-xl"
+          />
+        </div>
+        <div className="flex flex-col my-auto">
+          <h2 className="text-cyan-300 font-bold text-[17px]">
+            {data.displayName}
+          </h2>
+          <p
+            className={`${
+              data.hasPremium
+                ? "text-sm text-amber-400 font-bold"
+                : "text-sm text-gray-400"
+            }`}
+          >
+            {data.hasPremium ? "Premium User" : "Not a Premium User"}
+          </p>
+        </div>
+        <div
+          className="my-auto bg-cyan-700 px-3 py-2 rounded-xl"
+          onClick={() => handleAddAccept(data.userId)}
+        >
+          <AddIcon />
+        </div>
+      </div>
+    ));
+  } else if (
+    userList.filter((data) =>
+      data.displayName.toLowerCase().includes(search.toLowerCase())
+    ).length === 0
+  ) {
+    renderSearch = <p className="text-center">User not found</p>;
+  } else {
+    renderSearch = userList
+      .filter((data) =>
+        data.displayName.toLowerCase().includes(search.toLowerCase())
+      )
+      .map((data) => (
+        <div
+          key={data.userId}
+          className="flex w-[90%] gap-2 justify-between mx-3"
+        >
+          <div>
+            <Image
+              src={data.photoUrl || "/assets/images/logo_1.png"}
+              width={50}
+              height={50}
+              alt={""}
+              className="w-[15vh] h-[15vh] rounded-xl"
+            />
+          </div>
+          <div className="flex flex-col my-auto">
+            <h2 className="text-cyan-300 font-bold text-[17px]">
+              {data.displayName}
+            </h2>
+            <p
+              className={`${
+                data.hasPremium
+                  ? "text-sm text-amber-400 font-bold"
+                  : "text-sm text-gray-400"
+              }`}
+            >
+              {data.hasPremium ? "Premium User" : "Not a Premium User"}
+            </p>
+          </div>
+          <div
+            className="my-auto bg-cyan-700 px-3 py-2 rounded-xl"
+            onClick={() => handleAddAccept(data.userId)}
+          >
+            <AddIcon />
+          </div>
+        </div>
+      ));
+  }
 
   return (
     <div>
@@ -144,91 +218,7 @@ const Search = () => {
         </div>
 
         <div className="w-full flex flex-col gap-10 h-fit pb-[50%] py-3 mt-10">
-          {isLoading ? (
-            <p>Loading...</p>
-          ) : search.trim() === "" ? (
-            userList.map((data) => (
-              <div
-                key={data.userId}
-                className="flex w-[90%] gap-2 justify-between mx-3"
-              >
-                <div>
-                  <Image
-                    src={data.photoUrl || "/assets/images/logo_1.png"}
-                    width={50}
-                    height={50}
-                    alt={""}
-                    className="w-[15vh] h-[15vh] rounded-xl"
-                  />
-                </div>
-                <div className="flex flex-col my-auto">
-                  <h2 className="text-cyan-300 font-bold text-[17px]">
-                    {data.displayName}
-                  </h2>
-                  <p
-                    className={`${
-                      data.hasPremium
-                        ? "text-sm text-amber-400 font-bold"
-                        : "text-sm text-gray-400"
-                    }`}
-                  >
-                    {data.hasPremium ? "Premium User" : "Not a Premium User"}
-                  </p>
-                </div>
-                <div
-                  className="my-auto bg-cyan-700 px-3 py-2 rounded-xl"
-                  onClick={() => handleAddAccept(data.userId)}
-                >
-                  <AddIcon />
-                </div>
-              </div>
-            ))
-          ) : userList.filter((data) =>
-              data.displayName.toLowerCase().includes(search.toLowerCase())
-            ).length === 0 ? (
-            <p className="text-center">User not found</p>
-          ) : (
-            userList
-              .filter((data) =>
-                data.displayName.toLowerCase().includes(search.toLowerCase())
-              )
-              .map((data) => (
-                <div
-                  key={data.userId}
-                  className="flex w-[90%] gap-2 justify-between mx-3"
-                >
-                  <div>
-                    <Image
-                      src={data.photoUrl || "/assets/images/logo_1.png"}
-                      width={50}
-                      height={50}
-                      alt={""}
-                      className="w-[15vh] h-[15vh] rounded-xl"
-                    />
-                  </div>
-                  <div className="flex flex-col my-auto">
-                    <h2 className="text-cyan-300 font-bold text-[17px]">
-                      {data.displayName}
-                    </h2>
-                    <p
-                      className={`${
-                        data.hasPremium
-                          ? "text-sm text-amber-400 font-bold"
-                          : "text-sm text-gray-400"
-                      }`}
-                    >
-                      {data.hasPremium ? "Premium User" : "Not a Premium User"}
-                    </p>
-                  </div>
-                  <div
-                    className="my-auto bg-cyan-700 px-3 py-2 rounded-xl"
-                    onClick={() => handleAddAccept(data.userId)}
-                  >
-                    <AddIcon />
-                  </div>
-                </div>
-              ))
-          )}
+          {renderSearch}
         </div>
       </Layout>
     </div>
