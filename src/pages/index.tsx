@@ -61,9 +61,9 @@ const Index = () => {
   }
 
   return (
-      <Layout>
-        <HomeContainer />
-      </Layout>
+    <Layout>
+      <HomeContainer />
+    </Layout>
   );
 };
 
